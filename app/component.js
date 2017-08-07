@@ -14,6 +14,10 @@ var ProductComponent = (function () {
     function ProductComponent() {
         this.model = new repository_model_1.Model();
     }
+    ProductComponent.prototype.getClasses = function (key) {
+        var product = this.model.getProduct(key);
+        return "p-a-1 " + (product.price < 50 ? "bg-info" : "bg-warning");
+    };
     ProductComponent = __decorate([
         core_1.Component({
             selector: "app",
