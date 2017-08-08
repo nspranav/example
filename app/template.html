@@ -15,3 +15,13 @@
         </td>
     </tr>
 </table>
+<div class="p-a-1" [ngClass]="getClassMap(1)">
+    <span [style.fontSize]="fontSizeWithUnits">The first product</span> is {{model.getProduct(1).name}}
+</div>
+<div class="p-a-1" [ngClass]="getClassMap(2)">
+    <span [style.fontSize.px]="fontsizeWithoutUnits">The second Product</span> is {{model.getProduct(2).name}}
+</div>
+<div class="p-a-1" [ngClass]="{'bg-success':model.getProduct(3).price<50,
+                                'bg-info': model.getProduct(3).price>=50}">
+    Third product is {{model.getProduct(3).name}}
+</div>

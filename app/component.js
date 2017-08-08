@@ -13,10 +13,19 @@ var repository_model_1 = require("./repository.model");
 var ProductComponent = (function () {
     function ProductComponent() {
         this.model = new repository_model_1.Model();
+        this.fontSizeWithUnits = "30px";
+        this.fontsizeWithoutUnits = "30";
     }
     ProductComponent.prototype.getClasses = function (key) {
         var product = this.model.getProduct(key);
         return "p-a-1 " + (product.price < 50 ? "bg-info" : "bg-warning");
+    };
+    ProductComponent.prototype.getClassMap = function (key) {
+        var product = this.model.getProduct(key);
+        return {
+            "text-xs-center bg-danger": product.name == "Kayak",
+            "bg-info": product.price < 50
+        };
     };
     ProductComponent = __decorate([
         core_1.Component({
