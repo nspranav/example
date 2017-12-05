@@ -1,25 +1,36 @@
-import {Component} from "@angular/core";
-import {Model} from "./repository.model";
-
+import { ApplicationRef, Component } from "@angular/core";
+import { NgForm } from "@angular/forms";
+import { Model } from "./repository.model";
+import { Product } from "./product.model";
+import { ProductFormGroup } from "./form.model";
 @Component({
-    selector:"app",
-    templateUrl:"app/template.html"
+    selector: "app",
+    templateUrl: "app/template.html"
 })
-export class ProductComponent{
-    model:Model = new Model();
-
-    getClasses(key:number):string{
-        let product = this.model.getProduct(key);
-        return "p-a-1 "+(product.price < 50 ? "bg-info" : "bg-warning");
+export class ProductComponent {
+    model: Model = new Model();
+    form: ProductFormGroup = new ProductFormGroup();
+    getProduct(key: number): Product {
+        return this.model.getProduct(key);
     }
-    getClassMap(key:number):Object{
-        let product = this.model.getProduct(key);
-        return {
-            "text-xs-center bg-danger":product.name == "Kayak",
-            "bg-info":product.price<50
-        };
+    getProducts(): Product[] {
+        return this.model.getProducts();
     }
-
-    fontSizeWithUnits: string = "30px";
-    fontsizeWithoutUnits:string = "30";
+    newProduct: Product = new Product();
+    get jsonProduct() {
+        return JSON.stringify(this.newProduct);
+    }
+    addProduct(p: Product) {
+        console.log("New Product: " + this.jsonProduct);
+    }
+    formSubmitted: boolean = false;
+    submitForm(form: NgForm) {
+        this.formSubmitted = true;
+        if (form.valid) {
+            this.addProduct(this.newProduct);
+            this.newProduct = new Product();
+            form.reset();
+            this.formSubmitted = false;
+        }
+    }
 }

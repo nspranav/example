@@ -1,27 +1,28 @@
-<div [class]="getClasses(1)">
-    Name:{{model.getProduct(1)?.name || 'None'}}
-</div>
-<div class="form-group m-t-1">
-    <label>Name:</label>
-    <input class="form-control" [value]="model.getProduct(1)?.name || 'None'" />
-</div>
-<table class="table table-sm table-bordered table-striped m-t-1">
-    <tr>
-        <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
-    </tr>
-    <tr>
-        <td [attr.colspan]="model.getProducts().length">
-            {{model.getProduct(1)?.name || 'None'}}
-        </td>
-    </tr>
-</table>
-<div class="p-a-1" [ngClass]="getClassMap(1)">
-    <span [style.fontSize]="fontSizeWithUnits">The first product</span> is {{model.getProduct(1).name}}
-</div>
-<div class="p-a-1" [ngClass]="getClassMap(2)">
-    <span [style.fontSize.px]="fontsizeWithoutUnits">The second Product</span> is {{model.getProduct(2).name}}
-</div>
-<div class="p-a-1" [ngClass]="{'bg-success':model.getProduct(3).price<50,
-                                'bg-info': model.getProduct(3).price>=50}">
-    Third product is {{model.getProduct(3).name}}
-</div>
+<style>
+    input.ng-dirty.ng-invalid { border: 2px solid #ff0000 }
+    input.ng-dirty.ng-valid { border: 2px solid #6bc502 }
+</style>
+<div class="bg-info p-a-1 m-b-1">Model Data: {{jsonProduct}}</div>
+<form nonvalidate #form="ngForm" (ngSubmit)="submitForm(newProduct)">
+    <div class="bg-danger p-a-1 m-b-1" *ngIf="formSubmitted && form.invalid">
+        There are problems with form.
+    </div>
+    <!--<div class="form-group">-->
+        <!--<label>Name</label>-->
+        <!--<input class="form-control" [(ngModel)]="newProduct.name" />-->
+    <!--</div>-->
+    <!--<div class="form-group">-->
+        <!--<label>Category</label>-->
+        <!--<input class="form-control" [(ngModel)]="newProduct.category" />-->
+    <!--</div>-->
+    <div class="form-group">
+        <label>Price</label>
+        <input name="name" #name="ngModel" class="form-control" [(ngModel)]="newProduct.name" required maxlength="10" minlength="5" pattern="^[A-Za-z ]+$" />
+        <ul class="text-danger list-unstyled" *ngIf="(formSubmitted||name.dirty) && name.invalid">
+            <li *ngFor="let error of getValidationMessages(name)">
+                {{error}}
+            </li>
+        </ul>
+    </div>
+    <button class="btn btn-primary" type="submit">Create</button>
+</form>

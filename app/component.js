@@ -10,22 +10,57 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var repository_model_1 = require("./repository.model");
+var product_model_1 = require("./product.model");
 var ProductComponent = (function () {
     function ProductComponent() {
         this.model = new repository_model_1.Model();
-        this.fontSizeWithUnits = "30px";
-        this.fontsizeWithoutUnits = "30";
+        this.newProduct = new product_model_1.Product();
+        this.formSubmitted = false;
     }
-    ProductComponent.prototype.getClasses = function (key) {
-        var product = this.model.getProduct(key);
-        return "p-a-1 " + (product.price < 50 ? "bg-info" : "bg-warning");
+    ProductComponent.prototype.getProduct = function (key) {
+        return this.model.getProduct(key);
     };
-    ProductComponent.prototype.getClassMap = function (key) {
-        var product = this.model.getProduct(key);
-        return {
-            "text-xs-center bg-danger": product.name == "Kayak",
-            "bg-info": product.price < 50
-        };
+    ProductComponent.prototype.getProducts = function () {
+        return this.model.getProducts();
+    };
+    Object.defineProperty(ProductComponent.prototype, "jsonProduct", {
+        get: function () {
+            return JSON.stringify(this.newProduct);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ProductComponent.prototype.addProduct = function (product) {
+        console.log("New Product: " + this.jsonProduct);
+    };
+    ProductComponent.prototype.getValidationMessages = function (state, thingName) {
+        var thing = state.path || thingName;
+        var messages = [];
+        if (state.errors) {
+            for (var errorName in state.errors) {
+                switch (errorName) {
+                    case "required":
+                        messages.push("you must enter a " + thing);
+                        break;
+                    case "minlength":
+                        messages.push("A " + thing + " must be at least \n                        " + state.errors['minlength'].requiredLength + " characters");
+                        break;
+                    case "pattern":
+                        messages.push("The " + thing + " contains illegal characters");
+                        break;
+                }
+            }
+        }
+        return messages;
+    };
+    ProductComponent.prototype.submitForm = function (form) {
+        this.formSubmitted = true;
+        if (form.valid) {
+            this.addProduct(this.newProduct);
+            this.newProduct = new product_model_1.Product();
+            form.reset();
+            this.formSubmitted = false;
+        }
     };
     ProductComponent = __decorate([
         core_1.Component({
